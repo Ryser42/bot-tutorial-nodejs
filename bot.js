@@ -13,10 +13,6 @@ var body = {
 	text: ""
 };
 
-const quotes = [
-	
-];
-
 function respond() {
 	var request = JSON.parse(this.req.chunks[0]);
 
@@ -27,12 +23,8 @@ function respond() {
 	}
 }
 
-function getRandomIndex(arr) {
-	return Math.floor(Math.random() * arr.length);
-}
-
 function postMessage() {
-	body.text = quotes[getRandomIndex(quotes)];
+	body.text = getVerse();
 
 	console.log('sending ' + body.text + ' to ' + botID);
 
@@ -49,6 +41,14 @@ function postMessage() {
 		console.log('timeout posting message ' + JSON.stringify(err));
 	});
 	botReq.end(JSON.stringify(body));
+}
+
+function getVerse() {
+    var request = new XMLHttpRequest();
+	request.open("GET", "https://labs.bible.org/api/?passage=random&type=text");
+	request.send();
+	request.responseType = "text";
+	return request;
 }
 
 exports.respond = respond;
